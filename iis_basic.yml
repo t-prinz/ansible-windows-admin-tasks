@@ -1,15 +1,15 @@
 ---
-- name: install the iis web service
-  hosts: all
+- name: Install the iis web service
+  hosts: "{{ hostlist | default('all') }}"
   vars:
     iis_test_message: "Hello, World!"
   tasks:
-    - name: install iis
+    - name: Install iis
       win_feature:
         name: Web-Server
         state: present
 
-    - name: start iis service
+    - name: Start iis service
       win_service:
         name: W3Svc
         state: started
