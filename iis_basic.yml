@@ -2,7 +2,7 @@
 - name: Install the iis web service
   hosts: "{{ hostlist | default('all') }}"
   vars:
-    iis_test_message: "Hello, World!"
+    iis_test_message: "Hello, World from host {{ inventory_hostname }}!"
   tasks:
     - name: Install iis
       win_feature:
