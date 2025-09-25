@@ -4,18 +4,22 @@
     vars:
       iis_test_message: "Hello, world!"
     tasks:
+      - name: Stop the play if the host is not a Windows system
+        ansible.builtin.meta: end_host
+        when: ansible_facts['os_family'] is not defined or ansible_facts['os_family'] != "Windows"     # Other options: RedHat, Darwin
+
       - name: install iis
-        win_feature:
+        ansible.windows.win_feature:
           name: Web-Server
           state: present
   
       - name: start iis service
-        win_service:
+        ansible.windows.win_service:
           name: W3Svc
           state: started
   
       - name: Create website index.html
-        win_copy:
+        ansible.windows.win_copy:
           content: "{{ iis_test_message }}"
           dest: C:\Inetpub\wwwroot\index.html
   
@@ -28,5 +32,5 @@
         failed_when: iis_test_message not in response.content
 
       - name: Show website address
-        debug:
+        ansible.builtin.debug:
           msg: http://{{ ansible_host }}
